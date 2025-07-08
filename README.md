@@ -20,6 +20,6 @@ Integrated-Agent is a chat-driven assistant for financial advisors, seamlessly b
 ## Future Work
 
 - **HubSpot integration**
-  Add OAuth-based CRM access, ingest contacts & notes, enable RAG over HubSpot data, and expose CRM tool-calling. [Faced some issues with HubSpot dev account. Hence, wasn't able to implement this.]
+  Add OAuth-based CRM access, ingest contacts & notes, enable RAG over HubSpot data, and expose CRM tool-calling. [Faced some issues with HubSpot developer/test accounts. Hence, wasn't able to implement this.]
 - **Ongoing instructions & proactive workflows**  
   Support user-defined “when X happens, do Y” rules across email, calendar, and CRM for fully automated follow-ups and notifications.

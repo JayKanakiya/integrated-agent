@@ -10,12 +10,12 @@ from flask import (
     Flask, session, redirect, url_for,
     request, render_template, current_app, Response
 )
+from flask_migrate import Migrate
 from authlib.integrations.flask_client import OAuth
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from email.mime.text import MIMEText
 from dotenv import load_dotenv
-from hubspot_utils import ingest_hubspot_contacts
 import openai
 
 from datetime import datetime, timedelta
@@ -39,6 +39,8 @@ app.config.update(
 )
 
 db.init_app(app)
+migrate = Migrate(app, db)
+
 oauth = OAuth(app)
 oauth.register(
     name="google",

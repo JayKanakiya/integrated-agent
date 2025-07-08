@@ -27,8 +27,6 @@ from ingestion import ingest_gmail, ingest_calendar
 from vectorstore import get_top_k_docs
 
 load_dotenv(os.getenv("ENV_PATH", ".env"))
-CLIENT_ID     = os.getenv("HUBSPOT_CLIENT_ID_HUBSPOT")
-CLIENT_SECRET = os.getenv("HUBSPOT_CLIENT_SECRET_HUBSPOT")
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 

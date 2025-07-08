@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ask Anything</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background: #f7f8fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+      #chat-container {
+        width: 90%;
+        max-width: 600px;
+        height: 80vh;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+      }
+      #chat-header {
+        padding: 16px;
+        border-bottom: 1px solid #e0e0e0;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #111;
+      }
+      #chat-messages {
+        flex: 1;
+        padding: 16px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .message {
+        max-width: 70%;
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-size: 1rem;
+        line-height: 1.4;
+      }
+      .message.user {
+        background: #dcdcdc;
+        color: #000000;
+        align-self: flex-end;
+        border-bottom-right-radius: 4px;
+      }
+      .message.bot {
+        background: #ffffff;
+        color: #000000;
+        align-self: flex-start;
+        border-bottom-left-radius: 4px;
+      }
+      #chat-input {
+        display: flex;
+        border-top: 1px solid #e0e0e0;
+        padding: 8px;
+        gap: 8px;
+      }
+      #chat-input input {
+        flex: 1;
+        padding: 10px 14px;
+        border: 1px solid #ccc;
+        border-radius: 7px;
+        font-size: 1rem;
+      }
+      #chat-input button {
+        padding: 10px 16px;
+        background: #000000;
+        color: #fff;
+        border: none;
+        border-radius: 20px;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+      #chat-input button:hover {
+        opacity: 0.9;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="chat-container">
+      <div id="chat-header">Ask Anything</div>
+      <div id="chat-messages"></div>
+      <div id="chat-input">
+        <input
+          id="msg"
+          type="text"
+          placeholder="Type your message…"
+          autocomplete="off"
+        />
+        <button id="send-btn">Send</button>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script>
+      function addMessage(role, text) {
+        const cls = role === "user" ? "user" : "bot";
+        const el = $("<div>")
+          .addClass("message " + cls)
+          .text(text);
+        $("#chat-messages").append(el);
+        $("#chat-messages").scrollTop($("#chat-messages")[0].scrollHeight);
+      }
+
+      async function sendMessage() {
+        const text = $("#msg").val().trim();
+        if (!text) return;
+        addMessage("user", text);
+        $("#msg").val("");
+
+        let responseText;
+        try {
+          const res = await fetch("/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: text }),
+          });
+          responseText = await res.text();
+        } catch (e) {
+          console.error("Error sending message:", e);
+          responseText = "Error connecting to server";
+        }
+
+        addMessage("bot", responseText);
+      }
+
+      $("#send-btn").on("click", sendMessage);
+      $("#msg").on("keydown", function (e) {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+    </script>
+  </body>
+</html>
